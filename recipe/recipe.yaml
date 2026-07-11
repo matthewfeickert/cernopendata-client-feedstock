@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   version: "1.0.2"
-  python_min: "3.8"
+  python_min: "3.10"
 
 recipe:
   # recipe name needs to be unique from any outputs
@@ -14,7 +14,7 @@ source:
   sha256: 9d829c78434d5117806dea112fd276bade8c8d8cb93a10383c69f20845243a12
 
 build:
-  number: 1
+  number: 2
   noarch: python
 
 outputs:
@@ -42,7 +42,9 @@ outputs:
           imports:
             - cernopendata_client
           pip_check: true
-          python_version: ["${{ python_min }}.*", "3.14.*"]
+          python_version:
+            - ${{ python_min }}.*
+            - "*"
       - script:
           - cernopendata-client --help
 
@@ -62,7 +64,9 @@ outputs:
           imports:
             - cernopendata_client
           pip_check: true
-          python_version: ${{ python_min }}.*
+          python_version:
+            - ${{ python_min }}.*
+            - "*"
 
   - package:
       name: cernopendata-client-xrootd
@@ -73,14 +77,16 @@ outputs:
       run:
         - python >=${{ python_min }}
         - ${{ pin_subpackage("cernopendata-client", upper_bound="x.x.x") }}
-        - xrootd >=4.12.2
+        - python-xrootd
 
     tests:
       - python:
           imports:
             - cernopendata_client
           pip_check: true
-          python_version: ${{ python_min }}.*
+          python_version:
+            - ${{ python_min }}.*
+            - "*"
 
 about:
   summary: CERN Open Data command-line client
